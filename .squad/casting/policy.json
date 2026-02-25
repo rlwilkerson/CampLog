@@ -1,0 +1,8 @@
+{
+  "universe": "Star Wars (Original Trilogy)",
+  "policy_version": "1.0",
+  "created_at": "2025-01-01T00:00:00Z",
+  "max_agents": 20,
+  "overflow_strategy": "diegetic_expansion",
+  "notes": "Star Wars OT universe. Overflow to prequel/sequel characters from same franchise."
+}

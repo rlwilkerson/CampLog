@@ -1,0 +1,19 @@
+{
+  "assignments": [
+    {
+      "assignment_id": "camplog-001",
+      "timestamp": "2025-01-01T00:00:00Z",
+      "universe": "Star Wars (Original Trilogy)",
+      "agents": [
+        { "name": "Yoda", "role": "Lead / Architect" },
+        { "name": "Luke", "role": "Backend Dev" },
+        { "name": "Leia", "role": "Frontend Dev" },
+        { "name": "Chewie", "role": "DevOps / Infra" },
+        { "name": "Wedge", "role": "QA / Tester" },
+        { "name": "Scribe", "role": "Session Logger" },
+        { "name": "Ralph", "role": "Work Monitor" }
+      ],
+      "retired": ["Han", "Obi-Wan"]
+    }
+  ]
+}

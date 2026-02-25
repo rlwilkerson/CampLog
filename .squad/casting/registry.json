@@ -1,0 +1,76 @@
+{
+  "agents": [
+    {
+      "persistent_name": "Yoda",
+      "role": "Lead / Architect",
+      "universe": "Star Wars (Original Trilogy)",
+      "created_at": "2025-01-01T00:00:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Luke",
+      "role": "Backend Dev",
+      "universe": "Star Wars (Original Trilogy)",
+      "created_at": "2025-01-01T00:00:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Leia",
+      "role": "Frontend Dev",
+      "universe": "Star Wars (Original Trilogy)",
+      "created_at": "2025-01-01T00:00:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Chewie",
+      "role": "DevOps / Infra",
+      "universe": "Star Wars (Original Trilogy)",
+      "created_at": "2025-01-01T00:00:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Wedge",
+      "role": "QA / Tester",
+      "universe": "Star Wars (Original Trilogy)",
+      "created_at": "2025-01-01T00:00:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Scribe",
+      "role": "Session Logger",
+      "universe": "exempt",
+      "created_at": "2025-01-01T00:00:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Ralph",
+      "role": "Work Monitor",
+      "universe": "exempt",
+      "created_at": "2025-01-01T00:00:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Han",
+      "role": "retired",
+      "universe": "Star Wars (Original Trilogy)",
+      "created_at": "2025-01-01T00:00:00Z",
+      "legacy_named": false,
+      "status": "retired"
+    },
+    {
+      "persistent_name": "Obi-Wan",
+      "role": "retired",
+      "universe": "Star Wars (Original Trilogy)",
+      "created_at": "2025-01-01T00:00:00Z",
+      "legacy_named": false,
+      "status": "retired"
+    }
+  ]
+}
