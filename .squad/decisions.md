@@ -21,3 +21,20 @@
 **By:** Rick Wilkerson
 **What:** All UI must be mobile-friendly and responsive.
 **Why:** Owner-specified requirement.
+
+### 2025-01-27: OIDC Login Redirect Fix
+**By:** Chewie (DevOps/Infra)
+**What:** Configure OIDC and authentication cookies to use `SameSite=Lax` in development to handle mixed HTTP/HTTPS authentication flows.
+**Why:** ASP.NET Core OIDC middleware's default `SameSite=None; Secure=true` breaks when authentication involves HTTP (Keycloak dev) redirecting through HTTPS (app). `SameSite=Lax` allows cookies on top-level navigation across protocol boundaries while keeping CSRF protection.
+**Impact:** Fixes authentication redirect chain in dev environment. Production should enforce stricter `SameSite=None; Secure=true` when both app and Keycloak use HTTPS.
+
+### 2026-02-27: Preserve local login return URLs in frontend navigation
+**By:** Leia (Frontend)
+**What:** Unauthenticated UI login entry points now include `returnUrl` query parameter. Only local app routes accepted; falls back to `/`.
+**Why:** Post-logout trip navigation could produce unsafe redirect targets. Keeping return targets local and explicit prevents broken post-login routing and avoids unsafe redirects.
+
+### 2026-02-27: Sub claim resolution in API
+**By:** Luke (Backend)
+**What:** Update `CampLog.Api\Extensions\ClaimsPrincipalExtensions.cs` to resolve user ID from `sub` (raw JWT claim) or `ClaimTypes.NameIdentifier` (mapped subject claim).
+**Why:** Aspire API logs show 500 errors on `/trips` when authenticated requests contain mapped claims instead of raw `sub`. Accepting the mapped subject claim preserves strict auth expectations while supporting Keycloak token handling in ASP.NET claim mapping.
+**Impact:** Prevents erroneous 500s for valid Keycloak-authenticated users without introducing broad catches or silent fallbacks.

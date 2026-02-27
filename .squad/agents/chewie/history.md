@@ -68,3 +68,40 @@ Invoke-RestMethod -Uri "http://localhost:8080/admin/realms/camplog/users?usernam
 - **File locations:**
   - AppHost: `CampLog.AppHost\AppHost.cs`
   - Realm JSON: `CampLog.AppHost\keycloak\camplog-realm.json`
+
+### OIDC Correlation Cookie Fix (2025-01-27)
+
+**Problem:** Auth redirect chain failed with "Correlation failed" error. Users logged out → clicked protected page (e.g., /Trips) → redirected to Keycloak login → successful login → redirect back to `/signin-oidc` → **correlation cookie missing → authentication fails**.
+
+**Root cause:** ASP.NET Core OIDC middleware's correlation and nonce cookies default to `SameSite=None; Secure=true`, which requires HTTPS for both the app AND the identity provider. In dev, Keycloak runs on HTTP (`http://localhost:8080`) while the web app uses HTTPS → browsers reject the cookies as insecure on cross-site redirect.
+
+**Solution:** Configure OIDC and auth cookies to use `SameSite=Lax` for dev environments in `CampLog.Web\Program.cs`:
+
+```csharp
+builder.Services.AddAuthentication(options => { ... })
+.AddCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.Lax;
+})
+.AddOpenIdConnect(options =>
+{
+    // ... existing config ...
+    options.NonceCookie.SameSite = SameSiteMode.Lax;
+    options.CorrelationCookie.SameSite = SameSiteMode.Lax;
+    // ...
+});
+```
+
+**Impact:** `SameSite=Lax` allows cookies to be sent on top-level navigation (e.g., OIDC redirects) even with mixed HTTP/HTTPS, fixing the correlation failure. For production with full HTTPS, consider using environment-based configuration to enforce stricter settings.
+
+**Validation:** After changes, tested flow: logout → navigate to protected /Trips → redirect to Keycloak → login → successfully redirect back to /Trips with auth cookie preserved.
+
+### OIDC & Frontend Return URL Fix (2026-02-26)
+
+**Collaboration:** Chewie + Leia joint fix for complete login redirect chain
+- **Chewie (OIDC):** Fixed `CampLog.Web\Program.cs` cookies to use `SameSite=Lax`
+- **Leia (Frontend):** Propagated `returnUrl` through login entry points to ensure post-login navigation
+
+**Cross-agent dependency:** Chewie's OIDC fix enables Leia's returnUrl enhancement to work end-to-end. Together they solve the complete redirect problem: auth succeeds (Chewie) + user returns to intended page (Leia).
+
+**Session log:** `.squad\log\20260226-220105-login-redirect-fix.md`
