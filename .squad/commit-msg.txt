@@ -1,8 +1,0 @@
-Add profile page and logout link to nav
-
-- Create Account/Profile page showing display name, email, logout button
-- Make top-bar avatar a link to /Account/Profile when authenticated
-- Profile bottom tab routes to /Account/Profile (authenticated) or /Account/Login (anonymous)
-- [Authorize] on ProfileModel redirects unauthenticated users to login
-
-Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>

@@ -141,3 +141,31 @@ Establish consistent E2E testing pattern supporting mobile-first UI redesign wit
 - 57 new E2E test cases across 4 classes
 - All tests skipped in normal CI; enabled via filter when app+Keycloak available
 - Legacy stubs (AuthSpecs, TripSpecs, LocationSpecs) left unchanged
+
+---
+
+## 7. Ensure Keycloak Logout Includes client_id When id_token_hint Is Cleared
+
+**Date:** 2026-02-27  
+**Decider:** Luke (Backend)  
+**Status:** Implemented
+
+### Decision
+
+In `CampLog.Web\Program.cs`, explicitly set `context.ProtocolMessage.ClientId = context.Options.ClientId` inside the `OnRedirectToIdentityProviderForSignOut` event handler after clearing `id_token_hint`.
+
+### Rationale
+
+Keycloak requires either `id_token_hint` or `client_id` when `post_logout_redirect_uri` is sent. Clearing `id_token_hint` without adding `client_id` produces invalid logout requests (Invalid IDToken error). The fix ensures sign-out requests include required OIDC protocol parameters.
+
+### Scope
+
+- `CampLog.Web\Program.cs` OpenID Connect configuration
+- Event handler: `OnRedirectToIdentityProviderForSignOut`
+- No AppHost, Keycloak realm, or API changes
+
+### Consequences
+
+✅ Logout requests include both `client_id` and `post_logout_redirect_uri`  
+✅ Resolves ephemeral Keycloak restart logout failures  
+✅ Maintains existing id_token_hint clearing for dev stability
