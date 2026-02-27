@@ -27,6 +27,17 @@ builder.Services.AddAuthentication(options =>
     options.Scope.Add("email");
     options.RequireHttpsMetadata = false;
     options.GetClaimsFromUserInfoEndpoint = true;
+    options.SignedOutRedirectUri = "/";
+    options.Events = new OpenIdConnectEvents
+    {
+        OnRedirectToIdentityProviderForSignOut = context =>
+        {
+            // Clear id_token_hint to avoid "Invalid IDToken" when Keycloak restarts in dev.
+            // Keycloak will redirect to post_logout_redirect_uri using client_id alone.
+            context.ProtocolMessage.IdTokenHint = null;
+            return Task.CompletedTask;
+        }
+    };
 });
 builder.Services.AddAuthorization();
 builder.Services.AddHttpClient("api", client =>

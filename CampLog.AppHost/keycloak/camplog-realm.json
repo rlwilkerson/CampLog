@@ -14,7 +14,7 @@
       "username": "testuser",
       "enabled": true,
       "emailVerified": true,
-      "email": "testuser@example.com",
+      "email": "testuser@camplog.test",
       "firstName": "Test",
       "lastName": "User",
       "credentials": [
@@ -36,6 +36,9 @@
       "redirectUris": ["*"],
       "webOrigins": ["*"],
       "secret": "camplog-secret",
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
       "protocolMappers": [
         {
           "name": "camplog-web-audience",
