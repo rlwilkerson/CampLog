@@ -24,3 +24,4 @@
 - 2026-02-25: Reframed the shell into a native-app pattern with a 56px top app bar, fixed bottom tab bar, and a global HTMX-driven slide-up sheet (`#sheet-overlay`, `#sheet-panel`, `#trip-form-container`) controlled by lightweight vanilla JS class toggles.
 - 2026-02-25: Redesigned the Trips index for mobile app ergonomics using a terracotta FAB, 80px+ tappable trip cards (avatar block, date chip, one-line snippet, chevron, muted quick actions), and a minimal text-only empty state.
 - 2026-02-25: Converted Trips create/edit Razor views into sheet-friendly form partials (no outer chrome, keep hx-* flows) with in-sheet cancel controls via `data-close-sheet` so form interactions stay inside the bottom sheet UX.
+- 2026-02-27: Added an authenticated profile destination in the shell (avatar + Profile tab route to `/Account/Profile`) and introduced a mobile-first profile page that surfaces display name, email, and a Dusty Summer-styled logout action.

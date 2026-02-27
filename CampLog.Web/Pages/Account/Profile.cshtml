@@ -1,0 +1,18 @@
+@page
+@model CampLog.Web.Pages.Account.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+    var avatarInitial = string.IsNullOrWhiteSpace(Model.DisplayName) ? "👤" : Model.DisplayName[..1].ToUpperInvariant();
+}
+
+<section class="profile-page panel-card">
+    <header class="profile-header">
+        <div class="profile-avatar" aria-hidden="true">@avatarInitial</div>
+        <h1>@Model.DisplayName</h1>
+        <p>@Model.Email</p>
+    </header>
+
+    <form method="post" action="/Account/Logout" class="profile-logout-form">
+        <button type="submit" class="profile-logout-button">Log out</button>
+    </form>
+</section>
