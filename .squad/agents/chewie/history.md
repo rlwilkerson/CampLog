@@ -36,3 +36,35 @@ $token = (Invoke-RestMethod -Method Post -Uri "http://localhost:8080/realms/mast
 # Check user
 Invoke-RestMethod -Uri "http://localhost:8080/admin/realms/camplog/users?username=testuser" -Headers @{ Authorization="Bearer $token" }
 ```
+
+### Keycloak Realm Persistence & Audience Mapper (2025-01-23)
+
+**Problem:** Two Keycloak configuration issues:
+1. **Realm import skipped on restart**: `.WithDataVolume()` caused Keycloak to persist realm data, so changes to `camplog-realm.json` were ignored on subsequent starts (logs showed "Realm 'camplog' already exists. Import skipped").
+2. **Missing audience claim**: API validates `Audience = "camplog-web"` in JWT tokens, but Keycloak 26.x does NOT include the requesting client's ID in the `aud` claim by default — only `["account"]`. This caused 401 failures even with valid Bearer tokens.
+
+**Solution:**
+1. **Removed `.WithDataVolume()`** from Keycloak resource in `AppHost.cs` → now uses ephemeral storage, realm JSON is always re-imported fresh on startup.
+2. **Added audience protocol mapper** to `camplog-web` client in `camplog-realm.json`:
+   ```json
+   "protocolMappers": [
+     {
+       "name": "camplog-web-audience",
+       "protocol": "openid-connect",
+       "protocolMapper": "oidc-audience-mapper",
+       "consentRequired": false,
+       "config": {
+         "included.client.audience": "camplog-web",
+         "id.token.claim": "false",
+         "access.token.claim": "true"
+       }
+     }
+   ]
+   ```
+
+**Key learnings:**
+- **Aspire Keycloak**: Use `.WithDataVolume()` only in production-like scenarios where realm state must persist. For local dev with declarative realm JSON, prefer ephemeral storage for reproducibility.
+- **Keycloak audience**: Default OIDC access tokens do NOT include the client ID in `aud` — you must explicitly add an `oidc-audience-mapper` protocol mapper to inject the correct audience value for JWT validation.
+- **File locations:**
+  - AppHost: `CampLog.AppHost\AppHost.cs`
+  - Realm JSON: `CampLog.AppHost\keycloak\camplog-realm.json`

@@ -31,7 +31,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddHttpClient("api", client =>
 {
-    client.BaseAddress = new Uri("http://api");
+    client.BaseAddress = new Uri("https://api");
 }).AddServiceDiscovery();
 
 var app = builder.Build();

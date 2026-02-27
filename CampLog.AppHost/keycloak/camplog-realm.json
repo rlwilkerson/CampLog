@@ -35,7 +35,20 @@
       "standardFlowEnabled": true,
       "redirectUris": ["*"],
       "webOrigins": ["*"],
-      "secret": "camplog-secret"
+      "secret": "camplog-secret",
+      "protocolMappers": [
+        {
+          "name": "camplog-web-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "camplog-web",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        }
+      ]
     }
   ]
 }

@@ -14,3 +14,6 @@
 
 ## Learnings
 <!-- Append API patterns, EF migrations, service patterns below -->
+- 2026-02-27: In Aspire internal service-to-service HTTP calls, `app.UseHttpsRedirection()` in `CampLog.Api\Program.cs` can trigger 307 redirects that cause .NET `HttpClient` to drop `Authorization` on cross-scheme follow-up requests.
+- 2026-02-27: For internal `http://api` traffic, prefer removing HTTPS redirection in the API while keeping authentication/authorization middleware and endpoint mappings unchanged.
+- 2026-02-27: Key paths for this issue: `CampLog.Api\Program.cs`, `.squad\decisions.md`, `.squad\agents\luke\history.md`, `.squad\decisions\inbox\luke-remove-https-redirect.md`.

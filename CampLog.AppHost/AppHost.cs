@@ -5,7 +5,6 @@ var postgres = builder.AddPostgres("postgres")
 var db = postgres.AddDatabase("camplogdb");
 
 var keycloak = builder.AddKeycloak("keycloak", 8080)
-    .WithDataVolume()
     .WithRealmImport("keycloak");
 
 var api = builder.AddProject<Projects.CampLog_Api>("api")
