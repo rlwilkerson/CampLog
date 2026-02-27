@@ -1,0 +1,38 @@
+@page "{tripId:guid}"
+@model CampLog.Web.Pages.Trips.Locations.IndexModel
+@{
+    ViewData["Title"] = "Trip Locations";
+}
+
+<section class="page-header">
+    <h1>Locations</h1>
+    <p>Manage each place visited on this trip.</p>
+    <a role="button" asp-page="/Trips/Locations/Create" asp-route-tripId="@Model.TripId">Add Location</a>
+</section>
+
+@if (Model.Locations.Count == 0)
+{
+    <article class="empty-state">
+        <p>No locations yet.</p>
+    </article>
+}
+else
+{
+    <div class="location-list">
+        @foreach (var location in Model.Locations)
+        {
+            <article class="location-item">
+                <h3>@location.Name</h3>
+                <p>@(location.Description ?? "No description")</p>
+                <div class="meta-list">
+                    <small><strong>Dates:</strong> @(location.StartDate?.ToString("yyyy-MM-dd") ?? "-") to @(location.EndDate?.ToString("yyyy-MM-dd") ?? "-")</small>
+                    <small><strong>GPS:</strong> @(location.Latitude?.ToString() ?? "-"), @(location.Longitude?.ToString() ?? "-")</small>
+                </div>
+                <footer class="inline-actions">
+                    <a asp-page="/Trips/Locations/Edit" asp-route-tripId="@Model.TripId" asp-route-id="@location.Id">Edit</a>
+                    <a asp-page="/Trips/Locations/Delete" asp-route-tripId="@Model.TripId" asp-route-id="@location.Id">Delete</a>
+                </footer>
+            </article>
+        }
+    </div>
+}

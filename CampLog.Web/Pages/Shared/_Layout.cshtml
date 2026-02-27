@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CampLog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/%40picocss/pico%402/css/pico.min.css" />
+    <link rel="stylesheet" href="~/css/camplog.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CampLog.Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    @{
+        var requestPath = Context.Request.Path;
+        var isHomeTab = requestPath == "/";
+        var isTripsTab = requestPath.StartsWithSegments("/Trips");
+        var isProfileTab = requestPath.StartsWithSegments("/Account");
+        var displayName = User.Identity?.Name;
+        var userInitial = string.IsNullOrWhiteSpace(displayName) ? "👤" : displayName[..1].ToUpperInvariant();
+    }
+    <header class="app-topbar">
+        <div class="container app-topbar-inner">
+            <a href="/" class="brand-link"><strong>CampLog</strong></a>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <span class="user-avatar" aria-label="@displayName">@userInitial</span>
+            }
+            else
+            {
+                <a href="/Account/Login" class="login-icon-link" aria-label="Login">↪</a>
+            }
+        </div>
+    </header>
+    <main class="container site-main">
+        @RenderBody()
+    </main>
+    <nav class="app-tabbar" aria-label="Primary">
+        <a href="/" class="tab-link @(isHomeTab ? "is-active" : "")">🏕️ <span>Home</span></a>
+        <a href="/Trips" class="tab-link @(isTripsTab ? "is-active" : "")">🗺️ <span>Trips</span></a>
+        <a href="/Account/Login" class="tab-link @(isProfileTab ? "is-active" : "")">👤 <span>Profile</span></a>
+    </nav>
+    <div id="sheet-overlay" class="sheet-overlay" hidden></div>
+    <aside id="sheet-panel" class="sheet-panel" aria-modal="true" role="dialog" aria-labelledby="sheet-title" hidden>
+        <span class="sheet-handle" aria-hidden="true"></span>
+        <header class="sheet-header">
+            <h2 id="sheet-title">Trip</h2>
+            <button type="button" class="sheet-close" aria-label="Close" data-close-sheet>✕</button>
+        </header>
+        <div id="trip-form-container" class="sheet-content"></div>
+    </aside>
+    <script src="https://unpkg.com/htmx.org%402.0.4"></script>
+    <script>
+        (() => {
+            const body = document.body;
+            const overlay = document.getElementById('sheet-overlay');
+            const panel = document.getElementById('sheet-panel');
+            const container = document.getElementById('trip-form-container');
+            if (!overlay || !panel || !container) return;
+
+            const openSheet = () => {
+                overlay.hidden = false;
+                panel.hidden = false;
+                requestAnimationFrame(() => body.classList.add('sheet-open'));
+            };
+
+            const closeSheet = () => {
+                body.classList.remove('sheet-open');
+                window.setTimeout(() => {
+                    overlay.hidden = true;
+                    panel.hidden = true;
+                    container.innerHTML = '';
+                }, 220);
+            };
+
+            overlay.addEventListener('click', closeSheet);
+            document.addEventListener('click', (event) => {
+                if (event.target instanceof HTMLElement && event.target.hasAttribute('data-close-sheet')) {
+                    closeSheet();
+                }
+            });
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && body.classList.contains('sheet-open')) {
+                    closeSheet();
+                }
+            });
+
+            document.body.addEventListener('htmx:afterSwap', (event) => {
+                if (event.detail.target && event.detail.target.id === 'trip-form-container' && event.detail.target.innerHTML.trim()) {
+                    openSheet();
+                }
+            });
+        })();
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

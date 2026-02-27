@@ -1,0 +1,45 @@
+@page
+@model CampLog.Web.Pages.Trips.CreateModel
+@{
+    ViewData["Title"] = "Create Trip";
+    if (Request.Headers.ContainsKey("HX-Request"))
+    {
+        Layout = null;
+    }
+}
+
+<form method="post" class="sheet-form">
+    <div asp-validation-summary="All"></div>
+    <label>
+        Name
+        <input asp-for="Input.Name" required />
+    </label>
+    <label>
+        Description
+        <textarea asp-for="Input.Description"></textarea>
+    </label>
+    <div class="form-grid">
+        <label>
+            Latitude
+            <input asp-for="Input.Latitude" type="number" step="any" />
+        </label>
+        <label>
+            Longitude
+            <input asp-for="Input.Longitude" type="number" step="any" />
+        </label>
+    </div>
+    <div class="form-grid">
+        <label>
+            Start Date
+            <input asp-for="Input.StartDate" type="date" />
+        </label>
+        <label>
+            End Date
+            <input asp-for="Input.EndDate" type="date" />
+        </label>
+    </div>
+    <footer class="form-actions">
+        <button type="submit">Create Trip</button>
+        <button type="button" class="secondary" data-close-sheet>Cancel</button>
+    </footer>
+</form>

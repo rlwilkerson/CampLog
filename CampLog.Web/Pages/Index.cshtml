@@ -1,0 +1,16 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<article class="hero-card">
+    <header>
+        <h1>Track every stop of your next adventure</h1>
+        <p>CampLog keeps trips and campsite locations organized, so your journey is easier to plan and revisit.</p>
+    </header>
+    <footer class="inline-actions">
+        <a role="button" asp-page="/Trips/Index">View Trips</a>
+        <a role="button" class="secondary" asp-page="/Privacy">Privacy</a>
+    </footer>
+</article>

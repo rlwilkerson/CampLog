@@ -1,0 +1,43 @@
+@page
+@model CampLog.Web.Pages.Trips.IndexModel
+@{
+    ViewData["Title"] = "My Trips";
+}
+
+<section class="page-header">
+    <h1>My Trips</h1>
+    <p>Organize dates, notes, and destinations in one place.</p>
+</section>
+
+@if (Model.Trips.Count == 0)
+{
+    <section class="trip-empty-state">
+        <p>No trips yet</p>
+        <small>Tap + to add your first trip</small>
+    </section>
+}
+else
+{
+    <div class="trip-list">
+        @foreach (var trip in Model.Trips)
+        {
+            <article class="trip-item">
+                <a class="trip-main-link" asp-page="/Trips/Locations/Index" asp-route-tripId="@trip.Id">
+                    <span class="trip-avatar" aria-hidden="true">@((!string.IsNullOrWhiteSpace(trip.Name) ? trip.Name[..1].ToUpperInvariant() : "🏕️"))</span>
+                    <div class="trip-card-copy">
+                        <h3>@trip.Name</h3>
+                        <span class="trip-date-chip">@(trip.StartDate?.ToString("MMM d") ?? "No date")</span>
+                        <p class="trip-snippet">@Model.GetDescriptionSnippet(trip.Description)</p>
+                    </div>
+                    <span class="trip-chevron" aria-hidden="true">›</span>
+                </a>
+                <footer class="trip-card-actions">
+                    <a class="muted-action" hx-get="@Url.Page("/Trips/Edit", new { id = trip.Id })" hx-target="#trip-form-container" hx-swap="innerHTML">✏️ Edit</a>
+                    <a class="muted-action" asp-page="/Trips/Delete" asp-route-id="@trip.Id">🗑️ Delete</a>
+                </footer>
+            </article>
+        }
+    </div>
+}
+
+<button type="button" class="fab-add-trip" aria-label="Add trip" hx-get="/Trips/Create" hx-target="#trip-form-container" hx-swap="innerHTML">+</button>

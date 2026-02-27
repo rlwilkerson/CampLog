@@ -18,3 +18,9 @@
 
 ## Learnings
 <!-- Append Razor Page patterns, HTMX snippets, layout decisions below -->
+- 2026-02-25: Shifted CampLog to a mobile-first card layout for trips and locations, replacing wide tables with stacked article cards and grouped metadata so actions stay readable on phone screens.
+- 2026-02-25: Established shared UI utility patterns (`page-header`, `panel-card`, `trip-list`, `location-list`, `form-grid`, `form-actions`, `empty-state`) to keep Razor Pages visually consistent while preserving HTMX partial rendering.
+- 2026-02-25: Refined the Dusty Summer theme by tuning Pico variables and shell structure (sticky header, improved spacing hierarchy, softer surfaces, and stronger typography contrast) without changing the approved palette.
+- 2026-02-25: Reframed the shell into a native-app pattern with a 56px top app bar, fixed bottom tab bar, and a global HTMX-driven slide-up sheet (`#sheet-overlay`, `#sheet-panel`, `#trip-form-container`) controlled by lightweight vanilla JS class toggles.
+- 2026-02-25: Redesigned the Trips index for mobile app ergonomics using a terracotta FAB, 80px+ tappable trip cards (avatar block, date chip, one-line snippet, chevron, muted quick actions), and a minimal text-only empty state.
+- 2026-02-25: Converted Trips create/edit Razor views into sheet-friendly form partials (no outer chrome, keep hx-* flows) with in-sheet cancel controls via `data-close-sheet` so form interactions stay inside the bottom sheet UX.
