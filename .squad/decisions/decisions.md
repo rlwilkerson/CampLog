@@ -295,3 +295,35 @@ Codify design-quality gates directly in acceptance test suite to prevent future 
 ✅ Palette-lock prevents accidental color modifications  
 ✅ Touch target and responsive requirements enforced automatically  
 ⚠️ Requires Playwright test environment (Keycloak/AppHost availability)
+
+---
+
+## 11. Wire Web2 as a First-Class AppHost Resource
+
+**Date:** 2026-02-28  
+**Decider:** Chewie (DevOps/Infra)  
+**Status:** Implemented
+
+### Decision
+
+Add `CampLog.Web2` to Aspire AppHost as its own project resource (`"web2"`) and wire it to the same dependencies as `web`:
+- `api` (with `WaitFor(api)`)
+- `keycloak` (with `WaitFor(keycloak)`)
+
+### Rationale
+
+`CampLog.Web2` is now a parallel frontend track and should run under the same orchestration model as existing services for consistent local startup, identity flow, and dependency ordering.
+
+### Scope
+
+- `CampLog.AppHost/AppHost.cs`: Added Web2 resource definition
+- `CampLog.AppHost/CampLog.AppHost.csproj`: Added project reference to Web2
+- No changes to keycloak realm, API, or Web project
+
+### Consequences
+
+✅ AppHost now manages both `web` and `web2`  
+✅ Startup remains deterministic via existing wait-for dependency pattern  
+✅ Web2 inherits environment variables (API URL, Keycloak URL) from AppHost  
+✅ Both frontends can be tested concurrently in integration tests  
+⚠️ No changes needed to launchSettings or certificates; AppHost handles orchestration
