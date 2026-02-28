@@ -5,7 +5,9 @@ namespace CampLog.Api.Extensions;
 public static class ClaimsPrincipalExtensions
 {
     public static string GetKeycloakId(this ClaimsPrincipal user) =>
-        user.FindFirstValue("sub") ?? throw new InvalidOperationException("No sub claim");
+        user.FindFirstValue("sub")
+        ?? user.FindFirstValue(ClaimTypes.NameIdentifier)
+        ?? throw new InvalidOperationException("No sub claim");
 
     public static string GetEmail(this ClaimsPrincipal user) =>
         user.FindFirstValue("email") ?? string.Empty;

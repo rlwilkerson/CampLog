@@ -12,7 +12,10 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 })
-.AddCookie()
+.AddCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.Lax;
+})
 .AddOpenIdConnect(options =>
 {
     var keycloakUrl = builder.Configuration["services:keycloak:http:0"]
@@ -28,13 +31,16 @@ builder.Services.AddAuthentication(options =>
     options.RequireHttpsMetadata = false;
     options.GetClaimsFromUserInfoEndpoint = true;
     options.SignedOutRedirectUri = "/";
+    options.NonceCookie.SameSite = SameSiteMode.Lax;
+    options.CorrelationCookie.SameSite = SameSiteMode.Lax;
     options.Events = new OpenIdConnectEvents
     {
         OnRedirectToIdentityProviderForSignOut = context =>
         {
             // Clear id_token_hint to avoid "Invalid IDToken" when Keycloak restarts in dev.
-            // Keycloak will redirect to post_logout_redirect_uri using client_id alone.
+            // Ensure client_id is always included so logout has required OIDC parameters.
             context.ProtocolMessage.IdTokenHint = null;
+            context.ProtocolMessage.ClientId = context.Options.ClientId;
             return Task.CompletedTask;
         }
     };

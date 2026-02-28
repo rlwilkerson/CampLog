@@ -14,7 +14,9 @@
         var isHomeTab = requestPath == "/";
         var isTripsTab = requestPath.StartsWithSegments("/Trips");
         var isProfileTab = requestPath.StartsWithSegments("/Account");
-        var profileHref = User.Identity?.IsAuthenticated == true ? "/Account/Profile" : "/Account/Login";
+        var currentPathAndQuery = $"{Context.Request.Path}{Context.Request.QueryString}";
+        var loginHref = Url.Page("/Account/Login", new { returnUrl = currentPathAndQuery }) ?? "/Account/Login";
+        var profileHref = User.Identity?.IsAuthenticated == true ? "/Account/Profile" : loginHref;
         var displayName = User.Identity?.Name;
         var userInitial = string.IsNullOrWhiteSpace(displayName) ? "👤" : displayName[..1].ToUpperInvariant();
     }
@@ -27,7 +29,7 @@
             }
             else
             {
-                <a href="/Account/Login" class="login-icon-link" aria-label="Login">↪</a>
+                <a href="@loginHref" class="login-icon-link" aria-label="Login">↪</a>
             }
         </div>
     </header>
@@ -35,9 +37,9 @@
         @RenderBody()
     </main>
     <nav class="app-tabbar" aria-label="Primary">
-        <a href="/" class="tab-link @(isHomeTab ? "is-active" : "")">🏕️ <span>Home</span></a>
-        <a href="/Trips" class="tab-link @(isTripsTab ? "is-active" : "")">🗺️ <span>Trips</span></a>
-        <a href="@profileHref" class="tab-link @(isProfileTab ? "is-active" : "")">👤 <span>Profile</span></a>
+        <a href="/" class="tab-link @(isHomeTab ? "is-active" : "")" aria-current="@(isHomeTab ? "page" : null)"><span class="tab-icon">🏕️</span><span>Home</span></a>
+        <a href="/Trips" class="tab-link @(isTripsTab ? "is-active" : "")" aria-current="@(isTripsTab ? "page" : null)"><span class="tab-icon">🗺️</span><span>Trips</span></a>
+        <a href="@profileHref" class="tab-link @(isProfileTab ? "is-active" : "")" aria-current="@(isProfileTab ? "page" : null)"><span class="tab-icon">👤</span><span>Profile</span></a>
     </nav>
     <div id="sheet-overlay" class="sheet-overlay" hidden></div>
     <aside id="sheet-panel" class="sheet-panel" aria-modal="true" role="dialog" aria-labelledby="sheet-title" hidden>

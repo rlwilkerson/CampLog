@@ -11,7 +11,7 @@ public class LoginModel : PageModel
 {
     public IActionResult OnGet(string? returnUrl = null)
     {
-        var redirectUrl = string.IsNullOrWhiteSpace(returnUrl) ? "/" : returnUrl;
+        var redirectUrl = !string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl) ? returnUrl : "/";
         return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, OpenIdConnectDefaults.AuthenticationScheme);
     }
 }

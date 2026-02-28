@@ -7,11 +7,12 @@
 <section class="page-header">
     <h1>My Trips</h1>
     <p>Organize dates, notes, and destinations in one place.</p>
+    <small class="page-meta">@Model.Trips.Count trip@(Model.Trips.Count == 1 ? "" : "s")</small>
 </section>
 
 @if (Model.Trips.Count == 0)
 {
-    <section class="trip-empty-state">
+    <section class="trip-empty-state panel-card">
         <p>No trips yet</p>
         <small>Tap + to add your first trip</small>
     </section>
@@ -32,7 +33,7 @@ else
                     <span class="trip-chevron" aria-hidden="true">›</span>
                 </a>
                 <footer class="trip-card-actions">
-                    <a class="muted-action" hx-get="@Url.Page("/Trips/Edit", new { id = trip.Id })" hx-target="#trip-form-container" hx-swap="innerHTML">✏️ Edit</a>
+                    <a class="muted-action" hx-get="@Url.Page("/Trips/Edit", new { id = trip.Id })" hx-target="#trip-form-container" hx-swap="innerHTML" hx-disabled-elt="this">✏️ Edit</a>
                     <a class="muted-action" asp-page="/Trips/Delete" asp-route-id="@trip.Id">🗑️ Delete</a>
                 </footer>
             </article>
@@ -40,4 +41,4 @@ else
     </div>
 }
 
-<button type="button" class="fab-add-trip" aria-label="Add trip" hx-get="/Trips/Create" hx-target="#trip-form-container" hx-swap="innerHTML">+</button>
+<button type="button" class="fab-add-trip" aria-label="Add trip" hx-get="/Trips/Create" hx-target="#trip-form-container" hx-swap="innerHTML" hx-disabled-elt="this">+</button>
