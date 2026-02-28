@@ -14,6 +14,19 @@
 ## Learnings
 <!-- Append test patterns, edge cases found, quality gate rules below -->
 
+### 2026-02-28: Web Project Test Restart — Infrastructure Blocker Identified
+- **Test execution model mismatch:** 72 Playwright UI tests fail with `net::ERR_CONNECTION_REFUSED at https://localhost:7215` because xUnit test runner spawns isolated process with no access to running Aspire application.
+- **Root cause:** Playwright tests in `PlaywrightSetup.cs` assume web app + Keycloak are **externally running and reachable** before test execution. No mechanism exists to start AppHost within test lifecycle.
+- **Test specifications are complete:** All 7 frontend redesign acceptance criteria are coded and executable in `FrontendRedesignAcceptanceTests.cs`. Specs enforce Dusty Summer palette preservation, modern typography hierarchy (≥32px headings, ≥22px body line-height), 44×44px mobile touch targets, desktop nav rail (80-120px width), trip card visual hierarchy (≥12px radius, amber chip), and no horizontal overflow on 390px mobile.
+- **Passing baseline:** 28/28 unit/integration tests pass (ClaimsPrincipalExtensions, LocationRepository, TripRepository with Testcontainers PostgreSQL, API 401 auth guards).
+- **Skipped tests:** 18 integration tests require valid Keycloak JWT tokens for authenticated CRUD operations (marked `Skip = "Requires live Keycloak"`).
+- **Legacy test cleanup needed:** `AuthSpecs.cs`, `TripSpecs.cs`, `LocationSpecs.cs` use obsolete `http://localhost:5000` URL and duplicate coverage with new Playwright suite. Should be deleted or migrated to `PlaywrightSetup` base class.
+- **Blockers for Chewie (DevOps):** 
+  1. Create `AspireAppHostFixture : IAsyncLifetime` that programmatically starts AppHost before tests, exposes web endpoint URL, and tears down after completion. Integrate with xUnit `IClassFixture<AspireAppHostFixture>`.
+  2. Seed Keycloak test user (`testuser@camplog.test / testpass`) with required roles for trip/location CRUD via realm import or startup script.
+- **Pattern learned:** Playwright E2E tests in Aspire projects require explicit test fixture integration to orchestrate AppHost lifecycle. Tests cannot assume infrastructure is pre-running when executed via `dotnet test`.
+- **Coordinated web project restart with Leia:** Assessed test infrastructure blockers; documented acceptance criteria; identified 2 critical infrastructure handoffs to Chewie (AppHost fixture + Keycloak seeding). Blocking both frontend UI work (Leia) and QA validation (Wedge). Documented in decisions.md and orchestration-log.
+
 ### 2026-02-28: Frontend redesign QA gates added (design-first criteria)
 - Added Playwright acceptance suite `FrontendRedesignAcceptanceTests` to enforce modern layout quality without palette drift.
 - New gates now explicitly cover: Dusty Summer token preservation, readable typography thresholds, mobile 44x44 touch targets, desktop nav rail behavior, trip card spacing hierarchy, and no horizontal overflow at 390px.

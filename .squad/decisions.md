@@ -38,3 +38,19 @@
 **What:** Update `CampLog.Api\Extensions\ClaimsPrincipalExtensions.cs` to resolve user ID from `sub` (raw JWT claim) or `ClaimTypes.NameIdentifier` (mapped subject claim).
 **Why:** Aspire API logs show 500 errors on `/trips` when authenticated requests contain mapped claims instead of raw `sub`. Accepting the mapped subject claim preserves strict auth expectations while supporting Keycloak token handling in ASP.NET claim mapping.
 **Impact:** Prevents erroneous 500s for valid Keycloak-authenticated users without introducing broad catches or silent fallbacks.
+
+### 2026-02-28T04:40:53.300Z: User directive
+**By:** Rick Wilkerson (via Copilot)
+**What:** Create a new web UI project named CampLog.Web2 using Razor Pages, Pico CSS, and HTMX. Include modern layout plus Login/Logout/Register and Trips CRUD pages.
+**Why:** User request — captured for team memory
+
+### 2026-02-28T04:56:08.545Z: User directive
+**By:** Rick Wilkerson (via Copilot)
+**What:** Use CampLog.slnx as the solution file name.
+**Why:** User request — captured for team memory
+
+### 2026-02-28: Restart web project creation with safe parallel clone
+**By:** Leia (Frontend)
+**What:** Created `CampLog.Web2` by cloning the current modernized `CampLog.Web` UI stack and added `CampLog.Web2/CampLog.Web2.csproj` to `CampLog.slnx`.
+**Why:** This restarts the "new web project" effort with minimal risk, preserves current production-facing behavior, and provides a dedicated frontend workspace for future Wedge-spec-driven changes.
+**Blockers:** No Web2-specific Playwright specs from Wedge yet, so net-new UI divergence in `CampLog.Web2` is paused until those specs are provided.
