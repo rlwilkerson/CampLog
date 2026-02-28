@@ -14,6 +14,25 @@
 ## Learnings
 <!-- Append test patterns, edge cases found, quality gate rules below -->
 
+### 2026-02-28: Re-run after Chewie infra fixture updates (web project restart track)
+- **Validation rerun complete:** Re-executed QA filters after `AspireAppHostFixture` integration.
+- **Core filter (green):**  
+  `dotnet test CampLog.Tests\CampLog.Tests.csproj --filter "Category!=PlaywrightUI&FullyQualifiedName!~CampLog.Tests.AuthSpecs&FullyQualifiedName!~CampLog.Tests.TripSpecs&FullyQualifiedName!~CampLog.Tests.LocationSpecs"`  
+  **Result:** 46 total | 28 passed | 0 failed | 18 skipped.
+- **PlaywrightUI filter (red):**  
+  `dotnet test CampLog.Tests\CampLog.Tests.csproj --filter "Category=PlaywrightUI"`  
+  **Result:** 60 total | 11 passed | 49 failed.
+- **Representative failing specs (exact):**
+  - `AuthTests.AfterLogin_TripsPage_IsAccessibleWithoutRedirect` (`PlaywrightSpecs/AuthTests.cs:103`) redirects to `https://localhost:7215/signin-oidc` instead of `/Trips`.
+  - `TripCrudTests.TripsPage_ShowsMyTripsHeading` (`PlaywrightSpecs/TripCrudTests.cs:22`) gets error-page heading text: `"An unhandled exception occurred while pro..."` instead of `"My Trips"`.
+  - `FrontendRedesignAcceptanceTests.HomeHero_ModernSpacingAndTypography_MeetsReadabilityCriteria` (`PlaywrightSpecs/FrontendRedesignAcceptanceTests.cs:62`) fails line-height gate (`19.344px < 22px`).
+- **Owner handoff blockers:**
+  1. **Chewie (Infra/Auth):** post-login callback flow still lands at `/signin-oidc` for authenticated Trips navigation.
+  2. **Luke (Backend/API):** Trips experience intermittently renders server exception page during CRUD/navigation scenarios.
+  3. **Leia (Frontend/UI):** redesign acceptance regressions (typography threshold, horizontal overflow, tab/FAB/nav visibility and behavior) still failing in PlaywrightUI suite.
+
+**Cross-agent coordination note (2026-02-28):** Chewie's `AspireAppHostFixture` is now live. All three blocker categories (OIDC callback, Trips exception, UI acceptance) are now isolated with explicit team ownership. Wedge validation run confirms core tests green (28/28 non-Playwright). Parallel work can proceed: Chewie debugs `/signin-oidc` persistence, Luke debugs exception pages, Leia debugs acceptance regressions.
+
 ### 2026-02-28: Web Project Test Restart — Infrastructure Blocker Identified
 - **Test execution model mismatch:** 72 Playwright UI tests fail with `net::ERR_CONNECTION_REFUSED at https://localhost:7215` because xUnit test runner spawns isolated process with no access to running Aspire application.
 - **Root cause:** Playwright tests in `PlaywrightSetup.cs` assume web app + Keycloak are **externally running and reachable** before test execution. No mechanism exists to start AppHost within test lifecycle.

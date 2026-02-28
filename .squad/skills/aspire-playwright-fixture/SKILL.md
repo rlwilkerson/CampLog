@@ -212,6 +212,23 @@ Keep hardcoded `AppUrl = "https://localhost:7215"` in `PlaywrightSetup.cs` for t
 - [Aspire Testing Guidance](https://learn.microsoft.com/dotnet/aspire/testing)
 - [Playwright .NET](https://playwright.dev/dotnet)
 
+## CampLog Implementation Update (2026-02-28)
+
+- Implemented fixture file: `CampLog.Tests/Helpers/AspireAppHostFixture.cs`.
+- Playwright base class now uses fixture to resolve URL dynamically instead of hardcoding `https://localhost:7215`.
+- URL resolution order:
+  1. `CAMPLOG_TEST_BASE_URL`
+  2. HTTPS entries from `CampLog.Web/Properties/launchSettings.json`
+  3. HTTPS entries from `CampLog.Web2/Properties/launchSettings.json`
+- Fixture defaults:
+  - Auto-start AppHost (`aspire run --project CampLog.AppHost/CampLog.AppHost.csproj --non-interactive`) unless `CAMPLOG_TEST_AUTOSTART_APPHOST=false`.
+  - Validate Keycloak readiness at `CAMPLOG_TEST_KEYCLOAK_URL` (default `http://localhost:8080`).
+  - Validate token minting for `CAMPLOG_TEST_USER` / `CAMPLOG_TEST_PASSWORD` (defaults: `testuser@camplog.test` / `testpass`).
+
+### Required Keycloak Realm Alignment
+- `camplog-web` client must have `"directAccessGrantsEnabled": true` for token validation.
+- Realm import test user credentials must match fixture defaults or explicit env overrides.
+
 ---
 **Created by:** Wedge (QA/Tester)  
 **Date:** 2026-02-28  

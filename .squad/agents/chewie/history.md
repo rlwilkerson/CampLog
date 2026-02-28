@@ -105,3 +105,18 @@ builder.Services.AddAuthentication(options => { ... })
 **Cross-agent dependency:** Chewie's OIDC fix enables Leia's returnUrl enhancement to work end-to-end. Together they solve the complete redirect problem: auth succeeds (Chewie) + user returns to intended page (Leia).
 
 **Session log:** `.squad\log\20260226-220105-login-redirect-fix.md`
+
+### Playwright Infra Restart Fixture (2026-02-28)
+
+**Problem:** Playwright tests failed with `ERR_CONNECTION_REFUSED` because they hardcoded `https://localhost:7215` and assumed AppHost was already running.
+
+**Solution implemented:**
+- Added `CampLog.Tests\Helpers\AspireAppHostFixture.cs` and wired it into `PlaywrightSetup`.
+- Fixture resolves target URL from env (`CAMPLOG_TEST_BASE_URL`) or launchSettings (`CampLog.Web`/`CampLog.Web2`), can auto-start AppHost (`aspire run --non-interactive`), waits for Keycloak readiness, and validates test-user token issuance before browser tests run.
+- Updated realm import user password to `testpass` and enabled `directAccessGrantsEnabled` on `camplog-web` so fixture token checks are deterministic.
+
+**Operational notes:**
+- Overrides: `CAMPLOG_TEST_AUTOSTART_APPHOST=false`, `CAMPLOG_TEST_BASE_URL=<url>`, `CAMPLOG_TEST_KEYCLOAK_URL=<url>`.
+- Legacy Playwright files using `http://localhost:5000` remain outside this fixture and should be cleaned up by QA.
+
+**Cross-agent impact:** This fixture unblocks Wedge's validation runs and Leia's Web2 UI iteration by removing infrastructure brittleness.
