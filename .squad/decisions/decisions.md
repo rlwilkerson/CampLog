@@ -327,3 +327,78 @@ Add `CampLog.Web2` to Aspire AppHost as its own project resource (`"web2"`) and 
 ✅ Web2 inherits environment variables (API URL, Keycloak URL) from AppHost  
 ✅ Both frontends can be tested concurrently in integration tests  
 ⚠️ No changes needed to launchSettings or certificates; AppHost handles orchestration
+
+---
+
+## 12. Web2 Mockup Approval Variations for Layout Direction
+
+**Date:** 2026-02-28  
+**Decider:** Leia (Frontend)  
+**Status:** Decided
+
+### Decision
+
+Create two non-implementation Web2 mockup Razor page variations with a comparison landing page to enable stakeholder approval of layout direction before feature implementation.
+
+### Proposal Details
+
+**Variation A: Heritage Header + Content Bands**
+- Traditional horizontal top app bar (logo, search, auth controls)
+- Full-width content bands with section separation and background variation
+- Stacked cards in distinct sections (trips, locations)
+- Slide-out panel wired for trip create/edit forms via HTMX
+- Visual tone: Structured, formal, time-tested
+
+**Variation B: Ledger Header + Command Drawer**
+- Minimal horizontal header (logo only; auth in corner)
+- Narrow left-side action/filter drawer (alternative to fixed tab bar)
+- Main content area with ledger-grid layout (sparse, scannable item list)
+- Slide-out panel wired for trip create/edit forms via HTMX
+- Visual tone: Modern, data-focused, minimal chrome
+
+**Comparison Landing Page**
+- `CampLog.Web2/Pages/Mockups/Index.cshtml` — Side-by-side description with links to each variation
+- Purpose: Quick visual/UX reference for stakeholder selection
+
+### Design Guardrails
+
+- ✅ All Dusty Summer colors preserved (no palette drift)
+- ✅ Pico CSS baseline maintained (same form/button/typography scales)
+- ✅ HTMX behavior untouched (no breaking changes to existing flows)
+- ✅ Slide-out panel targets pre-wired in markup (ready for post-approval implementation)
+- ✅ Build validation passed (`dotnet build CampLog.slnx` succeeds)
+
+### Why This Matters
+
+- Gives owner clear side-by-side direction choices before implementation commitment
+- Preserves team boundary and Test First posture by deferring feature rollout until approval
+- Maintains AppHost/Web2 compatibility and Dusty Summer brand coherence
+- Establishes reusable mockup pattern for future design directions
+
+### Scope
+
+**New Files:**
+- `CampLog.Web2/Pages/Mockups/Index.cshtml` — Comparison landing page
+- `CampLog.Web2/Pages/Mockups/VariationA.cshtml` — Heritage Header pattern
+- `CampLog.Web2/Pages/Mockups/VariationB.cshtml` — Ledger Header pattern
+
+**Modified Files:**
+- `CampLog.Web2/wwwroot/css/camplog.css` — Added mockup utility classes (non-breaking)
+
+**Decision Documentation:**
+- Captured in `.squad/decisions/decisions.md` (this file)
+
+### Consequences
+
+✅ Two distinct layout directions available for stakeholder review  
+✅ Approval gate established before feature implementation begins  
+✅ HTMX targets ready for seamless feature transition post-approval  
+⚠️ Mockups are approval-only; no backend/service behavior changes  
+⚠️ Requires owner selection to proceed to full implementation phase
+
+### Next Steps
+
+1. → **Owner (Rick):** Select preferred direction (A or B)
+2. → **Wedge (QA):** Prepare Playwright specs for selected variation
+3. → **Leia (Frontend):** Implement selected variation with full feature routing
+4. → **All Teams:** Validate selection against accessibility/mobile/desktop requirements

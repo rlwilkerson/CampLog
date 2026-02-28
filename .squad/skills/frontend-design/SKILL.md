@@ -40,3 +40,10 @@ Interpret creatively and make unexpected choices that feel genuinely designed fo
 **IMPORTANT**: Match implementation complexity to the aesthetic vision. Maximalist designs need elaborate code with extensive animations and effects. Minimalist or refined designs need restraint, precision, and careful attention to spacing, typography, and subtle details. Elegance comes from executing the vision well.
 
 Remember: Claude is capable of extraordinary creative work. Don't hold back, show what can truly be created when thinking outside the box and committing fully to a distinctive vision.
+
+## CampLog Web2 mockup approval pattern
+
+When asked for layout direction approval before implementation:
+- Provide at least two clearly named mockup variants as separate Razor pages plus a comparison index page.
+- Keep the same color tokens and core UI functions, but vary shell architecture (header/nav/account hierarchy, content rhythm, panel positioning).
+- Use HTMX-friendly attributes targeting slide-out panel regions in mockups (`hx-get`, `hx-target`, `hx-swap`) while avoiding backend behavior changes.

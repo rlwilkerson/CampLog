@@ -120,3 +120,13 @@ builder.Services.AddAuthentication(options => { ... })
 - Legacy Playwright files using `http://localhost:5000` remain outside this fixture and should be cleaned up by QA.
 
 **Cross-agent impact:** This fixture unblocks Wedge's validation runs and Leia's Web2 UI iteration by removing infrastructure brittleness.
+
+### AppHost Web2 Resource Wiring (2026-02-28)
+
+**Change:** Added `CampLog.Web2` to Aspire AppHost by:
+- adding `CampLog.Web2.csproj` as a `ProjectReference` in `CampLog.AppHost\CampLog.AppHost.csproj`
+- registering `builder.AddProject<Projects.CampLog_Web2>("web2")` in `CampLog.AppHost\AppHost.cs`
+
+**Wiring pattern:** Mirror the existing `web` resource wiring (`WithReference(api).WaitFor(api)` and `WithReference(keycloak).WaitFor(keycloak)`) to keep service topology consistent between frontend hosts.
+
+**Validation:** `dotnet build CampLog.slnx` succeeds after the change, and `aspire run --project CampLog.AppHost\CampLog.AppHost.csproj --non-interactive` starts cleanly.
