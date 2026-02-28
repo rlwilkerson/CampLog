@@ -169,3 +169,129 @@ Keycloak requires either `id_token_hint` or `client_id` when `post_logout_redire
 ✅ Logout requests include both `client_id` and `post_logout_redirect_uri`  
 ✅ Resolves ephemeral Keycloak restart logout failures  
 ✅ Maintains existing id_token_hint clearing for dev stability
+
+---
+
+## 8. Frontend Modernization Architecture — CampLog Web
+
+**Date:** 2026-02-28  
+**Decider:** Yoda (Lead Architect)  
+**Status:** Implemented
+
+### Decision
+
+Modernize CampLog's frontend from minimal Pico CSS styling to a comprehensive design system maintaining the Dusty Summer color palette while introducing contemporary layout patterns, typography hierarchy, and responsive behavior.
+
+### Architecture Overview
+
+**Design System Components:**
+1. **Typography Hierarchy:** System font stack with scaled H1-H3 (1.75→2.25rem), improved body line-height (1.5)
+2. **Spacing System:** Extended scale from existing base (0.35–2.6rem) with added `--space-2xl` (3.6rem) for hero sections
+3. **Component Conventions:** Standardized cards (border, shadow, padding), button states, form focus, empty states
+4. **Layout Discipline:** Preserved 700px breakpoint; expanded desktop to max-width containers; sidebar ≥700px remains 86px vertical
+5. **Accessibility:** Maintained 4.5:1 contrast (WCAG AA), 44px touch targets, focus states
+6. **Color Preservation:** All Dusty Summer hex values unchanged; gradients/shadows/overlays use same colors at varying opacity
+
+**Pages Inventory:** 19 pages across 4 categories (auth, trips, locations, profile) with priority levels. High-priority modernization: Home, Trips/Locations lists, Profile.
+
+### 5-Phase Implementation Roadmap
+
+1. **Phase 1 (Tokens/Globals):** CSS variables, typography base, global card styles, form improvements
+2. **Phase 2 (Navigation):** Topbar refinement, tabbar modernization, mobile-to-desktop transition
+3. **Phase 3 (Content Pages):** Home hero polish, trips list refinement, profile page enhancement
+4. **Phase 4 (Forms/Modals):** Trip/location forms, bottom sheet animation, confirmation modals
+5. **Phase 5 (Edge Cases):** Delete confirmations, privacy page, error page consistency
+
+### Rationale
+
+Delivers cleaner, more modern experience across core pages with minimal risk by preserving existing routes, selectors, HTMX behavior, and Pico CSS foundation.
+
+### Consequences
+
+✅ Enhanced visual hierarchy and responsive behavior  
+✅ Improved typography readability and spacing consistency  
+✅ Modernized component appearance (cards, buttons, forms)  
+✅ Desktop sidebar at 700px breakpoint with improved navigation  
+⚠️ CSS-only updates; no breaking changes to Razor Pages or HTMX flows  
+⚠️ Requires validation testing across mobile/tablet/desktop viewports
+
+---
+
+## 9. Frontend Modernization Implementation — Leia
+
+**Date:** 2026-02-28  
+**Implementer:** Leia (Frontend)  
+**Status:** Implemented
+
+### Decision
+
+Apply modernized frontend refresh by enhancing visual hierarchy, spacing, card depth, and responsive polish while preserving Dusty Summer palette and existing HTMX behavior.
+
+### Scope Applied
+
+**CSS Updates:**
+- `CampLog.Web\wwwroot\css\camplog.css` with modernized typography scale, layered backgrounds, elevated card styles, refined nav/tab treatment
+
+**Page Refinements (7 pages):**
+- `CampLog.Web\Pages\Index.cshtml` (home hero)
+- `CampLog.Web\Pages\Trips\Index.cshtml` (trip list)
+- `CampLog.Web\Pages\Trips\Locations\Index.cshtml` (location list)
+- `CampLog.Web\Pages\Account\Profile.cshtml` (profile)
+- `CampLog.Web\Pages\Account\Register.cshtml` (register)
+- `CampLog.Web\Pages\Trips\Delete.cshtml` (trip delete)
+- `CampLog.Web\Pages\Trips\Locations\Delete.cshtml` (location delete)
+
+### Rationale
+
+Delivers cleaner, more modern experience across core pages with minimal risk by preserving existing routes, selectors, and HTMX interaction patterns. CSS-only improvements maintain backward compatibility.
+
+### Consequences
+
+✅ Modern typography hierarchy applied across all pages  
+✅ Improved card elevations and visual depth  
+✅ Enhanced spacing consistency and component polish  
+✅ Responsive behavior maintained for mobile/tablet/desktop  
+✅ HTMX flows and Playwright selectors preserved  
+⚠️ No breaking changes; all existing routes and selectors intact
+
+---
+
+## 10. Frontend Redesign Acceptance Test Gates — Wedge
+
+**Date:** 2026-02-28  
+**Decider:** Wedge (QA)  
+**Status:** Decided
+
+### Decision
+
+Add explicit design-quality acceptance criteria for frontend modernization via new Playwright test suite (`FrontendRedesignAcceptanceTests.cs`).
+
+### Pass/Fail Criteria for Leia
+
+1. **Palette Lock:** CSS custom properties preserve Dusty Summer tokens exactly
+   - `--color-salmon #E3AA99`
+   - `--color-rose #CD9F8F`
+   - `--color-terracotta #DC7147`
+   - `--color-amber #D8A748`
+   - `--pico-primary-inverse #FFFFFF`
+
+2. **Home Readability:** Hero heading and body meet minimum typographic/readability thresholds (font scale, line-height, card padding)
+
+3. **Mobile Navigation:** Bottom tab bar fixed at bottom with 3 tabs; each tab target ≥44×44
+
+4. **Desktop Navigation:** Tab nav becomes persistent left rail with constrained width and visible divider
+
+5. **Trip Cards:** Cards maintain modern hierarchy (radius, border, internal spacing); date chip preserves amber color (`rgb(216, 167, 72)`)
+
+6. **Responsive Safety:** `/`, `/Trips`, `/Account/Profile` must not introduce horizontal scrolling at 390px width
+
+### Rationale
+
+Codify design-quality gates directly in acceptance test suite to prevent future palette drift, typography regression, or responsive layout breakage. Separates design validation from infrastructure/auth test failures.
+
+### Consequences
+
+✅ Explicit pass/fail criteria prevent future style regressions  
+✅ Palette-lock prevents accidental color modifications  
+✅ Touch target and responsive requirements enforced automatically  
+⚠️ Requires Playwright test environment (Keycloak/AppHost availability)

@@ -14,6 +14,12 @@
 ## Learnings
 <!-- Append test patterns, edge cases found, quality gate rules below -->
 
+### 2026-02-28: Frontend redesign QA gates added (design-first criteria)
+- Added Playwright acceptance suite `FrontendRedesignAcceptanceTests` to enforce modern layout quality without palette drift.
+- New gates now explicitly cover: Dusty Summer token preservation, readable typography thresholds, mobile 44x44 touch targets, desktop nav rail behavior, trip card spacing hierarchy, and no horizontal overflow at 390px.
+- Baseline test reality: repository currently fails when app host/keycloak stack is unavailable or unhealthy; interpret Playwright failures by separating infrastructure readiness errors from genuine UI spec regressions.
+- **Cross-agent completion with Yoda & Leia:** Documented design-quality acceptance criteria in decisions.md. Frontend modernization cycle complete: Yoda (architecture) → Leia (implementation) → Wedge (validation gates). All three decision records merged.
+
 ### 2025-01-01: Baseline test run — all green
 - **Total:** 57 tests | **Passed:** 27 | **Failed:** 0 | **Skipped:** 30
 - Build: succeeded (no-build flag works, binaries are up to date)
@@ -65,3 +71,39 @@
 - xUnit `IAsyncLifetime` pattern: fresh browser context per test class
 - `Guid.NewGuid()` in trip names prevents test cross-contamination
 - Tests that need a trip create one on-demand rather than assuming data exists
+
+### 2026-02-26: Login Error Reproduction - OIDC Cookie SameSite Issue
+
+**Tested flow:** Logged out user → clicks protected route (View Trips) → redirected to login → Keycloak auth flow fails with 400 Bad Request
+
+**Error reproduced:**
+- **URL chain:** `https://localhost:7215/Account/Login?returnUrl=%2FTrips` → `http://localhost:8080/realms/camplog/protocol/openid-connect/auth?...`
+- **Keycloak response:** HTTP 400 Bad Request with "Invalid Request" error message
+- **Page ID:** `data-page-id="login-error"`
+- **Root cause:** OIDC correlation cookies using `SameSite=None` fail in mixed HTTP/HTTPS dev environment (app on HTTPS, Keycloak on HTTP)
+
+**Current code state (`CampLog.Web\Program.cs` lines 34-35):**
+```csharp
+options.NonceCookie.SameSite = SameSiteMode.None;
+options.CorrelationCookie.SameSite = SameSiteMode.None;
+```
+
+**Expected fix (per Chewie's documented solution):**
+```csharp
+options.NonceCookie.SameSite = SameSiteMode.Lax;
+options.CorrelationCookie.SameSite = SameSiteMode.Lax;
+```
+
+**CRITICAL FINDING:** Chewie's fix was documented in `.squad/agents/chewie/history.md` but **never actually committed to Program.cs**. The code still has `SameSiteMode.None` on lines 34-35, causing the login error to persist.
+
+**Test environment:**
+- Web app: `https://localhost:7215` (running, responding with HTTP 200)
+- Keycloak: `http://localhost:8080` (running, realm "camplog" configured)
+- AppHost PID: 54048 (CampLog.AppHost running)
+
+**Success criteria validation (pending fix application):**
+1. ✅ Reproduced error: 400 Bad Request on Keycloak auth flow with "Invalid Request" message
+2. ⏳ Post-fix validation: User should successfully authenticate and return to /Trips
+3. ⏳ Log validation: No correlation/nonce cookie errors in application logs
+
+**Next steps:** Chewie needs to apply the documented SameSite=Lax fix to `CampLog.Web\Program.cs` lines 34-35.

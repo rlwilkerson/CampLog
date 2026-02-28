@@ -21,11 +21,11 @@
 **Admin credentials:** Discovered via `docker inspect keycloak-wdysamyc --format "{{range .Config.Env}}{{println .}}{{end}}"`. The Aspire Keycloak hosting integration sets `KC_BOOTSTRAP_ADMIN_USERNAME=admin` and generates a random `KC_BOOTSTRAP_ADMIN_PASSWORD` at container start. The password changes on every Aspire restart — always re-read it from container env.
 
 **Test user created:**
-- username: `testuser`, email: `testuser@camplog.test`, firstName: Test, lastName: User
+- username: `testuser`, email: `[email scrubbed]`, firstName: Test, lastName: User
 - enabled: true, emailVerified: true, credentials: permanent (non-temporary)
 - Keycloak user ID: `1110ee1f-487a-41d9-b8a3-232aadd88968` (may change on container recreation)
 
-**Important: login uses email, not username.** The camplog realm has `registrationEmailAsUsername: true`, so login requires the email address (`testuser@camplog.test`) rather than the username (`testuser`). Direct access grants were enabled on the `camplog-web` client to support Playwright E2E test setup.
+**Important: login uses email, not username.** The camplog realm has `registrationEmailAsUsername: true`, so login requires the email address (`[email scrubbed]`) rather than the username (`testuser`). Direct access grants were enabled on the `camplog-web` client to support Playwright E2E test setup.
 
 **How to verify Keycloak user exists:**
 ```powershell
