@@ -9,6 +9,9 @@
 | Data models, migrations, database schema | Luke | Entity Framework, Npgsql |
 | Razor Pages, HTMX interactions, page layouts | Leia | Frontend — UI and UX owner |
 | Pico CSS, color theme, mobile responsiveness | Leia | Dusty Summer palette, responsive design |
+| React components, hooks, TypeScript types | Lando | React dev — CampLog.Web2 owner |
+| React routing, state management, API integration | Lando | TanStack Query, React Router |
+| React UI design, animation, accessibility | Lando | Dusty Summer in React, WCAG AA |
 | .NET Aspire configuration, orchestration | Chewie | AppHost, service defaults, resources |
 | Keycloak setup, OIDC integration, auth flow | Chewie | Identity provider config |
 | Docker Compose, environment variables, infra config | Chewie | Dev/prod environment parity |

@@ -130,3 +130,45 @@ builder.Services.AddAuthentication(options => { ... })
 **Wiring pattern:** Mirror the existing `web` resource wiring (`WithReference(api).WaitFor(api)` and `WithReference(keycloak).WaitFor(keycloak)`) to keep service topology consistent between frontend hosts.
 
 **Validation:** `dotnet build CampLog.slnx` succeeds after the change, and `aspire run --project CampLog.AppHost\CampLog.AppHost.csproj --non-interactive` starts cleanly.
+
+### Web3 React/Vite npm App Integration (2026-02-28)
+
+**Change:** Registered `CampLog.Web3` (React + Vite npm app) in Aspire AppHost:
+- Added `Aspire.Hosting.NodeJs` v9.5.2 package to `CampLog.AppHost.csproj`
+- Registered via `AddNpmApp("web3", "../CampLog.Web3", "dev")` in `AppHost.cs`
+- Wired environment variables: `VITE_API_BASE_URL` → API HTTPS endpoint, `VITE_KEYCLOAK_URL` → Keycloak HTTP endpoint
+- Declared HTTP endpoint on port 3000 and added Docker publish support
+
+**Pattern used:**
+```csharp
+builder.AddNpmApp("web3", "../CampLog.Web3", "dev")
+    .WithReference(api).WaitFor(api)
+    .WithEnvironment("VITE_API_BASE_URL", api.GetEndpoint("https"))
+    .WithEnvironment("VITE_KEYCLOAK_URL", keycloak.GetEndpoint("http"))
+    .WithHttpEndpoint(port: 3000, env: "PORT")
+    .PublishAsDockerFile();
+```
+
+**Note:** Aspire.Hosting.NodeJs version (9.5.2) differs from core Aspire version (13.1.2) — NodeJs hosting is on separate release cadence.
+
+### Web3 React/Vite npm App Integration (2026-02-28)
+
+**Change:** Registered `CampLog.Web3` (React + Vite npm app) in Aspire AppHost:
+- Added `Aspire.Hosting.NodeJs` v9.5.2 package to `CampLog.AppHost.csproj`
+- Registered via `AddNpmApp("web3", "../CampLog.Web3", "dev")` in `AppHost.cs`
+- Wired environment variables: `VITE_API_BASE_URL` → API HTTPS endpoint, `VITE_KEYCLOAK_URL` → Keycloak HTTP endpoint
+- Declared HTTP endpoint on port 3000 and added Docker publish support
+
+**Pattern used:**
+```csharp
+builder.AddNpmApp("web3", "../CampLog.Web3", "dev")
+    .WithReference(api).WaitFor(api)
+    .WithEnvironment("VITE_API_BASE_URL", api.GetEndpoint("https"))
+    .WithEnvironment("VITE_KEYCLOAK_URL", keycloak.GetEndpoint("http"))
+    .WithHttpEndpoint(port: 3000, env: "PORT")
+    .PublishAsDockerFile();
+```
+
+**Note:** Aspire.Hosting.NodeJs version (9.5.2) differs from core Aspire version (13.1.2) — NodeJs hosting is on separate release cadence.
+
+**Validation:** `dotnet build CampLog.AppHost\CampLog.AppHost.csproj` succeeds.

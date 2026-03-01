@@ -402,3 +402,92 @@ Create two non-implementation Web2 mockup Razor page variations with a compariso
 2. → **Wedge (QA):** Prepare Playwright specs for selected variation
 3. → **Leia (Frontend):** Implement selected variation with full feature routing
 4. → **All Teams:** Validate selection against accessibility/mobile/desktop requirements
+
+---
+
+## 13. Scaffold CampLog.Web3
+
+**Date:** 2026-02-28  
+**Decider:** Lando (React Frontend Dev)  
+**Status:** Implemented
+
+### Decision
+
+Scaffold CampLog.Web3 with Vite, Material UI v7, React Router v6, TanStack Query, React Hook Form + Zod, and OIDC auth wiring.
+
+### Scope
+
+**Project Structure:** CampLog.Web3/ using Vite + React 18 + TypeScript
+
+**Core Files:**
+- src/theme.ts — Dusty Summer MUI theme
+- src/api/client.ts — API client with Bearer token injection
+- src/types/api.ts — TypeScript domain models (Trip, Location)
+- src/main.tsx — React 18 entry point
+- src/App.tsx — React Router v6 configuration
+- src/components/AppShell.tsx — MUI AppBar + BottomNavigation (mobile) + Drawer sidebar (desktop)
+- src/components/LoadingScreen.tsx — Loading spinner overlay
+- src/components/TripFormDialog.tsx, LocationFormDialog.tsx — CRUD forms via React Hook Form + Zod
+- src/pages/TripsPage.tsx, TripDetailPage.tsx, CallbackPage.tsx — Routed pages
+- package.json with "dev": "vite" script
+- vite.config.ts with strictPort: true for Aspire compatibility
+
+**Dependencies Installed:**
+- @mui/material@7.0.0, react-router-dom@6.20.0, @tanstack/react-query@5.28.0
+- react-hook-form@7.49.0, zod@3.22.4
+- react-oidc-context@3.2.5, oidc-client-ts@1.11.0
+
+### Consequences
+
+✅ CampLog.Web3 provides base structure, theming, routing shell, and trip/location pages for future feature work  
+✅ Responsive design with MUI components (mobile-first BottomNavigation, desktop Drawer sidebar)  
+✅ OIDC auth wiring via react-oidc-context for Keycloak integration  
+✅ API client ready for server state management with TanStack Query  
+✅ Form infrastructure established with React Hook Form + Zod validation  
+
+---
+
+## 14. Web3 React/Vite npm App Integration in Aspire AppHost
+
+**Date:** 2026-02-28  
+**Decider:** Chewie (DevOps/Infra)  
+**Status:** Implemented
+
+### Decision
+
+Register CampLog.Web3 (React + Vite npm app) in Aspire AppHost using `Aspire.Hosting.NodeJs` package for unified orchestration alongside Web and Web2 frontends.
+
+### Scope
+
+**Package Addition:**
+- Added `Aspire.Hosting.NodeJs` v9.5.2 to `CampLog.AppHost.csproj`
+- Note: Version 9.5.2 is older than core Aspire 13.1.2; NodeJs hosting is on separate release cadence
+
+**AppHost Registration (AppHost.cs):**
+```csharp
+builder.AddNpmApp("web3", "../CampLog.Web3", "dev")
+    .WithReference(api).WaitFor(api)
+    .WithEnvironment("VITE_API_BASE_URL", api.GetEndpoint("https"))
+    .WithEnvironment("VITE_KEYCLOAK_URL", keycloak.GetEndpoint("http"))
+    .WithHttpEndpoint(port: 3000, env: "PORT")
+    .PublishAsDockerFile();
+```
+
+**Configuration:**
+- Resource name: "web3" (Aspire dashboard label)
+- npm script: "dev" (executes `npm run dev` = Vite dev server)
+- Port: 3000 (Vite default, declared to Aspire)
+- Environment variables:
+  - VITE_API_BASE_URL → API HTTPS endpoint
+  - VITE_KEYCLOAK_URL → Keycloak HTTP endpoint
+- Dependency: WithReference(api).WaitFor(api) ensures API starts first
+
+### Consequences
+
+✅ Web3 integrated into unified Aspire orchestration  
+✅ AppHost manages Web3 startup/shutdown with `aspire run`  
+✅ Environment variables automatically injected (no manual .env files)  
+✅ Aspire dashboard monitors Web3 alongside api/web/web2/keycloak/postgres  
+✅ Consistent dependency ordering: api + keycloak → web3  
+
+⚠️ Version mismatch: Aspire.Hosting.NodeJs 9.5.2 vs core Aspire 13.1.2; track for future upgrade when NodeJs package releases v13.1.2+

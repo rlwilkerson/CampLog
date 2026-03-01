@@ -57,6 +57,14 @@
       "status": "active"
     },
     {
+      "persistent_name": "Lando",
+      "role": "React Frontend Dev",
+      "universe": "Star Wars (Original Trilogy)",
+      "created_at": "2025-07-14T00:00:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
       "persistent_name": "Han",
       "role": "retired",
       "universe": "Star Wars (Original Trilogy)",
