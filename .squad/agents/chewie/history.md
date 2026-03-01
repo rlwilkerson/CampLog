@@ -172,3 +172,32 @@ builder.AddNpmApp("web3", "../CampLog.Web3", "dev")
 **Note:** Aspire.Hosting.NodeJs version (9.5.2) differs from core Aspire version (13.1.2) — NodeJs hosting is on separate release cadence.
 
 **Validation:** `dotnet build CampLog.AppHost\CampLog.AppHost.csproj` succeeds.
+
+### Web3 Switched from AddNpmApp to AddViteApp (2026-02-28)
+
+**Change:** Migrated `CampLog.Web3` from generic `AddNpmApp` to specialized `AddViteApp` method:
+- Removed `Aspire.Hosting.NodeJs` v9.5.2 (deprecated NodeJs package)
+- Added `Aspire.Hosting.JavaScript` v13.1.2 (new unified JavaScript hosting integration)
+- Replaced `AddNpmApp("web3", "../CampLog.Web3", "dev")` with `AddViteApp("web3", "../CampLog.Web3")`
+
+**Pattern used:**
+```csharp
+builder.AddViteApp("web3", "../CampLog.Web3")
+    .WithReference(api).WaitFor(api)
+    .WithEnvironment("VITE_API_BASE_URL", api.GetEndpoint("https"))
+    .WithEnvironment("VITE_KEYCLOAK_URL", keycloak.GetEndpoint("http"))
+    .WithHttpEndpoint(port: 3000, env: "PORT")
+    .PublishAsDockerFile();
+```
+
+**Why AddViteApp:** The `AddViteApp` method from `Aspire.Hosting.JavaScript` is purpose-built for Vite apps and provides better defaults:
+- Automatically uses "dev" script for development (no need to specify)
+- Uses "build" script for publishing
+- Part of the unified Aspire 13.x JavaScript hosting integration aligned with core Aspire version
+- Documentation: https://learn.microsoft.com/en-us/dotnet/aspire/get-started/build-aspire-apps-with-nodejs
+
+**Package versions:**
+- `Aspire.Hosting.JavaScript`: 13.1.2 (now aligned with Aspire.AppHost.Sdk/13.1.2)
+- Removed: `Aspire.Hosting.NodeJs` 9.5.2 (separate release cadence, replaced by unified JavaScript package)
+
+**Validation:** Code compiles successfully with `dotnet build` (file locking warnings due to running Aspire instance are non-blocking).

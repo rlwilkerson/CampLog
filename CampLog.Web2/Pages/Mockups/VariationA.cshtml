@@ -1,0 +1,76 @@
+@page
+@model CampLog.Web.Pages.Mockups.VariationAModel
+@{
+    ViewData["Title"] = "Mockup Variation A";
+}
+
+<section class="mockup-shell mockup-a">
+    <header class="mockup-header panel-card">
+        <a href="/" class="brand-link"><strong>CampLog</strong></a>
+        <nav aria-label="Variation A Navigation">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/Trips">Trips</a></li>
+                <li><a href="/Privacy">Privacy</a></li>
+            </ul>
+        </nav>
+        <div class="mockup-account-actions">
+            <a role="button" class="secondary outline" href="/Account/Login">Login</a>
+            <a role="button" class="outline" href="/Account/Profile">Profile</a>
+        </div>
+    </header>
+
+    <main class="mockup-main-grid">
+        <article class="hero-card">
+            <p class="hero-kicker">Variation A</p>
+            <h1>Traditional website structure with modern surfaces</h1>
+            <p>Primary actions stay in content bands while create and edit workflows open in slide-out side panels.</p>
+            <footer class="inline-actions">
+                <button type="button"
+                        hx-get="/Trips/Create"
+                        hx-target="#variation-a-panel-content"
+                        hx-swap="innerHTML">
+                    New Trip (Slide-Out)
+                </button>
+                <a role="button" class="secondary" href="/Trips">View Trips</a>
+            </footer>
+        </article>
+
+        <section class="panel-card">
+            <header class="mockup-section-header">
+                <h2>Trips at a glance</h2>
+                <small>Core function preserved: trip list with quick actions</small>
+            </header>
+            <div class="trip-list">
+                <article class="trip-item">
+                    <a class="trip-main-link" href="#">
+                        <span class="trip-avatar" aria-hidden="true">R</span>
+                        <div class="trip-card-copy">
+                            <h3>Red Rock Loop</h3>
+                            <span class="trip-date-chip">Apr 14</span>
+                            <p class="trip-snippet">3 stops planned with notes and campground details.</p>
+                        </div>
+                        <span class="trip-chevron" aria-hidden="true">›</span>
+                    </a>
+                    <footer class="trip-card-actions">
+                        <a class="muted-action"
+                           hx-get="/Trips/Edit/1"
+                           hx-target="#variation-a-panel-content"
+                           hx-swap="innerHTML">✏️ Edit</a>
+                        <a class="muted-action" href="#">🗑️ Delete</a>
+                    </footer>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <aside class="mockup-slideout panel-card" id="variation-a-panel" aria-label="Variation A Slide-Out Panel">
+        <header class="mockup-section-header">
+            <h2>Slide-Out Panel</h2>
+            <small>Replaces modal UX; HTMX targets this panel content.</small>
+        </header>
+        <div id="variation-a-panel-content" class="sheet-content">
+            <p>Select <strong>New Trip</strong> or <strong>Edit</strong> to load form partials here.</p>
+        </div>
+    </aside>
+</section>

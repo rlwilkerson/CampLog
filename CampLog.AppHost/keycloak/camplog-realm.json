@@ -31,12 +31,11 @@
     {
       "clientId": "camplog-web",
       "protocol": "openid-connect",
-      "publicClient": false,
+      "publicClient": true,
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
       "redirectUris": ["*"],
       "webOrigins": ["*"],
-      "secret": "camplog-secret",
       "attributes": {
         "post.logout.redirect.uris": "+"
       },

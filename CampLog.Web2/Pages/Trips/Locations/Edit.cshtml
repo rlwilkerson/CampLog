@@ -1,0 +1,45 @@
+@page "{tripId:guid}/{id:guid}"
+@model CampLog.Web.Pages.Trips.Locations.EditModel
+@{
+    ViewData["Title"] = "Edit Location";
+}
+
+<article class="panel-card">
+    <h1>Edit Location</h1>
+    <form method="post">
+        <div asp-validation-summary="All"></div>
+        <input type="hidden" asp-for="Input.Id" />
+        <label>
+            Name
+            <input asp-for="Input.Name" required />
+        </label>
+        <label>
+            Description
+            <textarea asp-for="Input.Description"></textarea>
+        </label>
+        <div class="form-grid">
+            <label>
+                Latitude
+                <input asp-for="Input.Latitude" type="number" step="any" />
+            </label>
+            <label>
+                Longitude
+                <input asp-for="Input.Longitude" type="number" step="any" />
+            </label>
+        </div>
+        <div class="form-grid">
+            <label>
+                Start Date
+                <input asp-for="Input.StartDate" type="date" />
+            </label>
+            <label>
+                End Date
+                <input asp-for="Input.EndDate" type="date" />
+            </label>
+        </div>
+        <footer class="form-actions">
+            <button type="submit">Save</button>
+            <a role="button" class="secondary" asp-page="/Trips/Locations/Index" asp-route-tripId="@Model.TripId">Cancel</a>
+        </footer>
+    </form>
+</article>

@@ -1,0 +1,84 @@
+@page
+@model CampLog.Web.Pages.Mockups.VariationBModel
+@{
+    ViewData["Title"] = "Mockup Variation B";
+}
+
+<section class="mockup-shell mockup-b">
+    <header class="mockup-header panel-card">
+        <div>
+            <a href="/" class="brand-link"><strong>CampLog</strong></a>
+            <small class="page-meta">Variation B</small>
+        </div>
+        <nav aria-label="Variation B Navigation">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/Trips">Trips</a></li>
+                <li><a href="/Account/Profile">Profile</a></li>
+            </ul>
+        </nav>
+        <div class="mockup-account-actions">
+            <a role="button" class="secondary outline" href="/Account/Login">Login</a>
+            <a role="button" class="outline" href="/Account/Profile">My Profile</a>
+        </div>
+    </header>
+
+    <main class="mockup-main-grid">
+        <section class="panel-card">
+            <header class="mockup-section-header">
+                <h1>Expedition dashboard</h1>
+                <p>Modernized card density with a classic top-nav website flow and command drawer actions.</p>
+            </header>
+            <div class="mockup-command-row">
+                <button type="button"
+                        class="contrast"
+                        hx-get="/Trips/Create"
+                        hx-target="#variation-b-panel-content"
+                        hx-swap="innerHTML">
+                    Add Trip
+                </button>
+                <button type="button"
+                        class="secondary"
+                        hx-get="/Trips/Locations/Create?tripId=1"
+                        hx-target="#variation-b-panel-content"
+                        hx-swap="innerHTML">
+                    Add Location
+                </button>
+            </div>
+            <div class="location-list">
+                <article class="location-item">
+                    <h3>Riverbend Camp</h3>
+                    <p>Fri check-in · Utilities confirmed · Weather notes attached.</p>
+                    <div class="inline-actions">
+                        <a href="#">View Details</a>
+                        <a href="#"
+                           hx-get="/Trips/Locations/Edit/1"
+                           hx-target="#variation-b-panel-content"
+                           hx-swap="innerHTML">Edit in Drawer</a>
+                    </div>
+                </article>
+                <article class="location-item">
+                    <h3>Pine Canyon</h3>
+                    <p>Sat overnight · Trailhead parking available · Reminder set.</p>
+                    <div class="inline-actions">
+                        <a href="#">View Details</a>
+                        <a href="#"
+                           hx-get="/Trips/Locations/Edit/2"
+                           hx-target="#variation-b-panel-content"
+                           hx-swap="innerHTML">Edit in Drawer</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <aside class="mockup-slideout panel-card" id="variation-b-panel" aria-label="Variation B Command Drawer">
+        <header class="mockup-section-header">
+            <h2>Command Drawer</h2>
+            <small>Slide-out panel for forms and contextual trip/location actions.</small>
+        </header>
+        <div id="variation-b-panel-content" class="sheet-content">
+            <p>This area receives HTMX responses for trip and location forms.</p>
+        </div>
+    </aside>
+</section>

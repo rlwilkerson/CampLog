@@ -1,0 +1,54 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampLog.Api", "CampLog.Api\CampLog.Api.csproj", "{306741B8-4397-A277-3EC1-C17D3C4020D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampLog.AppHost", "CampLog.AppHost\CampLog.AppHost.csproj", "{AFFA25AD-850D-9BE6-FDCB-35115A800E99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampLog.ServiceDefaults", "CampLog.ServiceDefaults\CampLog.ServiceDefaults.csproj", "{8E09BAB1-61A7-914E-5F62-C0B0F1919178}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampLog.Tests", "CampLog.Tests\CampLog.Tests.csproj", "{9318BFCB-5042-EBE8-8510-D156D9B4F457}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampLog.Web", "CampLog.Web\CampLog.Web.csproj", "{7B76C397-A877-E49C-A836-1E9465B47CB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampLog.Web2", "CampLog.Web2\CampLog.Web2.csproj", "{DFD75CF2-A790-D3A4-A571-FD85A9F87664}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{306741B8-4397-A277-3EC1-C17D3C4020D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{306741B8-4397-A277-3EC1-C17D3C4020D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{306741B8-4397-A277-3EC1-C17D3C4020D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{306741B8-4397-A277-3EC1-C17D3C4020D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFFA25AD-850D-9BE6-FDCB-35115A800E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFFA25AD-850D-9BE6-FDCB-35115A800E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFFA25AD-850D-9BE6-FDCB-35115A800E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFFA25AD-850D-9BE6-FDCB-35115A800E99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E09BAB1-61A7-914E-5F62-C0B0F1919178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E09BAB1-61A7-914E-5F62-C0B0F1919178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E09BAB1-61A7-914E-5F62-C0B0F1919178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E09BAB1-61A7-914E-5F62-C0B0F1919178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9318BFCB-5042-EBE8-8510-D156D9B4F457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9318BFCB-5042-EBE8-8510-D156D9B4F457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9318BFCB-5042-EBE8-8510-D156D9B4F457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9318BFCB-5042-EBE8-8510-D156D9B4F457}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B76C397-A877-E49C-A836-1E9465B47CB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B76C397-A877-E49C-A836-1E9465B47CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B76C397-A877-E49C-A836-1E9465B47CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B76C397-A877-E49C-A836-1E9465B47CB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFD75CF2-A790-D3A4-A571-FD85A9F87664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFD75CF2-A790-D3A4-A571-FD85A9F87664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFD75CF2-A790-D3A4-A571-FD85A9F87664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFD75CF2-A790-D3A4-A571-FD85A9F87664}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8BECA19-1A80-4204-948D-C6692AE4C7F4}
+	EndGlobalSection
+EndGlobal

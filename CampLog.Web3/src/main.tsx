@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
 });
 
 const oidcConfig = {
-  authority: import.meta.env.VITE_KEYCLOAK_URL ?? 'http://localhost:8080',
+  authority: `${import.meta.env.VITE_KEYCLOAK_URL ?? 'http://localhost:8080'}/realms/camplog`,
   client_id: import.meta.env.VITE_KEYCLOAK_CLIENT_ID ?? 'camplog-web',
   redirect_uri: window.location.origin + '/callback',
   post_logout_redirect_uri: window.location.origin,

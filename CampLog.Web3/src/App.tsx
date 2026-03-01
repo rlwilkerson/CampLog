@@ -15,10 +15,13 @@ export default function App() {
     setApiToken(auth.user?.access_token ?? null);
   }, [auth.user]);
 
-  if (auth.isLoading) return <LoadingScreen />;
+  useEffect(() => {
+    if (!auth.isLoading && !auth.isAuthenticated && !auth.activeNavigator && !auth.error) {
+      auth.signinRedirect();
+    }
+  }, [auth.isLoading, auth.isAuthenticated, auth.activeNavigator, auth.error]);
 
-  if (!auth.isAuthenticated) {
-    auth.signinRedirect();
+  if (auth.isLoading || (!auth.isAuthenticated && !auth.error)) {
     return <LoadingScreen />;
   }
 

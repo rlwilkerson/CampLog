@@ -19,11 +19,10 @@ builder.AddProject<Projects.CampLog_Web2>("web2")
     .WithReference(api).WaitFor(api)
     .WithReference(keycloak).WaitFor(keycloak);
 
-builder.AddNpmApp("web3", "../CampLog.Web3", "dev")
+builder.AddViteApp("web3", "../CampLog.Web3")
     .WithReference(api).WaitFor(api)
     .WithEnvironment("VITE_API_BASE_URL", api.GetEndpoint("https"))
     .WithEnvironment("VITE_KEYCLOAK_URL", keycloak.GetEndpoint("http"))
-    .WithHttpEndpoint(port: 3000, env: "PORT")
     .PublishAsDockerFile();
 
 builder.Build().Run();

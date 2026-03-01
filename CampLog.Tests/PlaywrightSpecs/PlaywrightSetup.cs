@@ -1,21 +1,19 @@
 using Microsoft.Playwright;
+using CampLog.Tests.Helpers;
 
 namespace CampLog.Tests.PlaywrightSpecs;
 
 /// <summary>
 /// Base class for Playwright UI tests. Manages browser lifecycle and provides login helpers.
-/// Tests require: app running at https://localhost:7215 + Keycloak.
-/// Credentials: env vars CAMPLOG_TEST_USER / CAMPLOG_TEST_PASSWORD (default: testuser / testpass).
+/// Resolves app URL from fixture (CAMPLOG_TEST_BASE_URL or launchSettings) and validates Keycloak test user.
 /// </summary>
 public abstract class PlaywrightSetup : IAsyncLifetime
 {
-    protected const string AppUrl = "https://localhost:7215";
+    private readonly AspireAppHostFixture _appHostFixture = new();
+    protected string AppUrl { get; private set; } = string.Empty;
 
-    protected static readonly string TestUsername =
-        Environment.GetEnvironmentVariable("CAMPLOG_TEST_USER") ?? "testuser@camplog.test";
-
-    protected static readonly string TestPassword =
-        Environment.GetEnvironmentVariable("CAMPLOG_TEST_PASSWORD") ?? "testpass";
+    protected string TestUsername => _appHostFixture.TestUsername;
+    protected string TestPassword => _appHostFixture.TestPassword;
 
     protected IPlaywright PlaywrightInstance { get; private set; } = null!;
     protected IBrowser Browser { get; private set; } = null!;
@@ -24,6 +22,9 @@ public abstract class PlaywrightSetup : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
+        await _appHostFixture.InitializeAsync();
+        AppUrl = _appHostFixture.WebBaseUrl;
+
         PlaywrightInstance = await Playwright.CreateAsync();
         Browser = await PlaywrightInstance.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
@@ -42,6 +43,7 @@ public abstract class PlaywrightSetup : IAsyncLifetime
         await Context.CloseAsync();
         await Browser.CloseAsync();
         PlaywrightInstance.Dispose();
+        await _appHostFixture.DisposeAsync();
     }
 
     /// <summary>Navigates to /Account/Login, waits for Keycloak redirect, then logs in with test credentials.</summary>

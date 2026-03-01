@@ -37,3 +37,19 @@
 **Achievement:** Yoda designed comprehensive design system; Leia implemented modernized CSS and 7 core pages. Frontend now has contemporary visual hierarchy, improved spacing, and elevated card treatment while preserving Dusty Summer palette and HTMX flows.
 
 **Cross-agent outcome:** Yoda→decisions.md (architecture), Leia→decisions.md (implementation), Wedge→decisions.md (acceptance criteria) merged. Build validation passed. All decisions logged.
+
+### 2026-02-28: Full Stack Specification Written
+**Task:** Explored entire CampLog codebase and created comprehensive technical specification document.
+
+**Output:** `docs/SPEC.md` — 600+ line specification covering:
+- Project overview, solution structure, complete tech stack (versions)
+- Architecture (Aspire orchestration, service dependencies, auth flows)
+- Data model (User, Trip, Location entities with all fields)
+- API (all endpoints, DTOs, auth rules)
+- Three frontend variants (Web Razor+HTMX, Web2 clone, Web3 React+MUI)
+- Identity & auth (Keycloak realm config, OIDC flows, test credentials)
+- Infrastructure (Postgres, Keycloak, Aspire dashboard, telemetry)
+- Development setup (prerequisites, running app, ports, migrations)
+- All key architectural decisions with rationale
+
+**Purpose:** Authoritative reference for onboarding developers or AI models to the CampLog project. Enables full system understanding without code exploration.

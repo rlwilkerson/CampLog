@@ -1,0 +1,21 @@
+@page "{id:guid}"
+@model CampLog.Web.Pages.Trips.DeleteModel
+@{
+    ViewData["Title"] = "Delete Trip";
+}
+
+<article class="panel-card confirm-card">
+    <h1>Delete Trip</h1>
+    @if (Model.Trip is null)
+    {
+        <p>Trip not found.</p>
+    }
+    else
+    {
+        <p>Are you sure you want to delete <strong>@Model.Trip.Name</strong>?</p>
+        <form method="post" class="form-actions">
+            <button type="submit" class="contrast">Delete</button>
+            <a role="button" class="secondary" asp-page="/Trips/Index">Cancel</a>
+        </form>
+    }
+</article>

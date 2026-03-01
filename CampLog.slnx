@@ -4,4 +4,5 @@
   <Project Path="CampLog.ServiceDefaults/CampLog.ServiceDefaults.csproj" />
   <Project Path="CampLog.Tests/CampLog.Tests.csproj" />
   <Project Path="CampLog.Web/CampLog.Web.csproj" />
+  <Project Path="CampLog.Web2/CampLog.Web2.csproj" />
 </Solution>

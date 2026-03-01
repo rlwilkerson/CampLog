@@ -1,0 +1,25 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+    var tripsHref = User.Identity?.IsAuthenticated == true
+        ? (Url.Page("/Trips/Index") ?? "/Trips")
+        : (Url.Page("/Account/Login", new { returnUrl = Url.Page("/Trips/Index") ?? "/Trips" }) ?? "/Account/Login");
+}
+
+<article class="hero-card">
+    <header>
+        <p class="hero-kicker">CampLog</p>
+        <h1>Track every stop of your next adventure</h1>
+        <p>CampLog keeps trips and campsite locations organized, so your journey is easier to plan and revisit.</p>
+        <ul class="hero-metrics">
+            <li>Plan faster</li>
+            <li>Capture memories</li>
+            <li>Stay organized</li>
+        </ul>
+    </header>
+    <footer class="inline-actions">
+        <a role="button" href="@tripsHref">View Trips</a>
+        <a role="button" class="secondary" asp-page="/Privacy">Privacy</a>
+    </footer>
+</article>

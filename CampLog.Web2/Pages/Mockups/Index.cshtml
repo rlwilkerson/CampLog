@@ -1,0 +1,24 @@
+@page
+@model CampLog.Web.Pages.Mockups.IndexModel
+@{
+    ViewData["Title"] = "Web2 Mockup Variations";
+}
+
+<section class="page-header">
+    <h1>Web2 Mockup Variations</h1>
+    <p>Two visual directions using the same CampLog functions, Dusty Summer palette, and HTMX-ready slide-out interaction points.</p>
+</section>
+
+<div class="mockup-compare-list">
+    <article class="panel-card">
+        <h2>Variation A — Heritage Header + Content Bands</h2>
+        <p>Traditional top navigation with login/profile controls in the masthead and slide-out side panel triggers for create/edit actions.</p>
+        <a role="button" asp-page="/Mockups/VariationA">Open Variation A</a>
+    </article>
+
+    <article class="panel-card">
+        <h2>Variation B — Ledger Header + Command Drawer</h2>
+        <p>Classic brand-and-nav header with a stronger dashboard rhythm and right-side slide-out command panel for trip/location workflows.</p>
+        <a role="button" class="secondary" asp-page="/Mockups/VariationB">Open Variation B</a>
+    </article>
+</div>
